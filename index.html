@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="yall.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+  </head>
+  <body>
+    JUST YOUR REGULAR IMAGE (result: shouldn't be evaluated with unveil)<br/>
+    <img src="assets/spacer.png" id="nolazy"><br/><br/>
+    <div class='topspacer'>scrolldown to see images lazy load...</div>
+
+    STANDARD LAZY LOAD - no data-sizes (result: small waffles)<br/>
+    <img class="lazy" src="assets/spacer.png" data-src="assets/img.jpg"><br/><br/>
+
+    LO (result: only small waffles on scr1/2)<br>
+    <img id="onlylo" class="lazy" src="assets/spacer.png" data-src="assets/img.jpg" data-sizes="lo"><br/><br/>
+
+    HI (result: only big waffles on scr3/4)<br/>
+    <img id="onlyhi" class="lazy" src="assets/spacer.png" data-src="assets/img.jpg" data-sizes="hi"><br/><br/>
+
+    LO,HI (result: small or big waffles, depending on res)<br/>
+    <img id="lohi" class="lazy" src="assets/spacer.png" data-src="assets/img.jpg" data-sizes="lo,hi"><br/><br/>
+
+    HI,LO (result: small or big waffles, depending on res)<br/>
+    <img id="hilo" class="lazy" src="assets/spacer.png" data-src="assets/img.jpg" data-sizes="hi,lo"><br/><br/>
+
+    RET-LO, RET-HI, HI, LO (result: small or big waffles, depending on res and retina)<br/>
+    <img class="lazy" src="assets/spacer.png" data-src="assets/img.jpg" data-sizes="ret-hi,ret-lo,hi,lo"><br/><br/>
+
+    HORIZONTAL - OUTSIDE RIGHT EDGE OF VIEWPORT
+    <img src="assets/spacer.png" class="lazy far-right" data-src="assets/img.jpg"><br/><br/>
+
+    STYLE IS DISPLAY:NONE (result not loaded)
+    <img style="display:none" src="assets/spacer.png" class="lazy" data-src="assets/img.jpg"><br/><br/>
+
+    STYLE IS VISIBILITY:HIDDEN (result not loaded)
+    <img style="visibility:hidden;" src="assets/spacer.png" class="lazy" data-src="assets/img.jpg"><br/><br/>
+
+    MIN-SCR3 CLASS WITH data-src="img-hi.jpg" (result large loaded only for screen 3 and 4)
+    <img src="assets/spacer.png" class="lazy min-scr3" data-src="assets/img-hi.jpg"><br/><br/>
+
+    SVG - should be used only on supported browsers when specified
+    <img class="lazy" src="assets/spacer.png" data-src="assets/img.jpg" data-sizes="svg, hi, lo"><br/><br/>
+
+    IMAGE IS UNHIDDEN IN 5 SECONDS (result: if polling enabled, the image should change to waffles)<br/>
+    <img style="display:none;" class="lazy displayIn5sec" src="assets/spacer.png" data-src="assets/img.jpg"><br/><br/>
+    <script>
+        $(document).ready(function() {
+            function displayIn5sec() { $(".displayIn5sec").show();}
+            setTimeout(displayIn5sec, 5000);
+        })
+    </script>
+
+    EDGE CASES - data-src points to nonexistent image (result: warning inline message for missing image)<br>
+    <img class="lazy" src="assets/spacer.png" data-src="assets/not-there.jpg"><br/><br/>
+
+    EDGE CASES - data-src points to nonexistent image with data-sizes (result: warning inline message for missing image with suffix)<br>
+    <img class="lazy" src="assets/spacer.png" data-src="assets/not-there.jpg" data-sizes="lo,hi"><br/><br/>
+
+    EDGE CASES - data-sizes points to nonexistent image dimensions 'crazysize' (result: no change, shows spacer image)<br>
+    <img class="lazy" src="assets/spacer.png" data-src="assets/img.jpg" data-sizes="crazysize"><br/><br/>
+
+    EDGE CASES - spaces in data-sizes "&nbsp;&nbsp;hi&nbsp;&nbsp;,&nbsp;&nbsp;lo&nbsp;&nbsp;" (result: small or big waffles, depending on res)<br>
+    <img class="lazy" src="assets/spacer.png" data-src="assets/img.jpg" data-sizes="  hi  ,  lo  "><br/><br/>
+
+    EDGE CASES - empty data-sizes (result: small waffles)<br>
+    <img class="lazy" src="assets/spacer.png" data-src="assets/img.jpg" data-sizes=""><br/><br/>
+
+    EDGE CASES - missing handler (result inline message)
+    <img class="lazy" src="assets/spacer.png"><br/><br/>
+
+
+    <hr>
+    <h1>Background Images</h1>
+
+    STANDARD LAZY LOAD - no data-sizes, no data-style, setting height/width elsewhere (result: small waffles)<br/>
+    <div class="lazy" data-src="assets/img.jpg" style="height:50px; width:50px;"></div><br/><br/>
+
+    LO,HI - with style dimensions (result: only small waffles or large waffles depending on screen size)<br>
+    <div class="lazy" data-src="assets/img.jpg" data-sizes="lo,hi" data-style="lo=( height : 50px ; width : 50px ; background-position : top center ;),hi=( height : 150px ; width : 150px ; background-position : top center ;)"></div><br/><br/>
+
+    LO,HI - with hardcoded dimensions, position, repeat for both resolutions (result: only small waffles on scr1/2)<br>
+    <div class="lazy" data-src="assets/img.jpg" data-sizes="lo,hi" style="height:500px; width:500px; background-position:-50px -50px; background-repeat:repeat;"></div><br/><br/>
+
+    HI ONLY - (result: large waffles on scr3/4, no image on scr 1/2)<br>
+    <div class="lazy" data-src="assets/img.jpg" data-sizes="hi" data-style="hi=( height : 150px ; width : 150px ; background-position : top center ;)"></div><br/><br/>
+
+    LO ONLY - (result: small waffles on scr1/2, no image on scr 3/4)<br>
+    <div class="lazy" data-src="assets/img.jpg" data-sizes="lo" data-style="lo=( height : 150px ; width : 150px ; background-position : top center ;)"></div><br/><br/>
+
+    STYLE IS DISPLAY:NONE (result not loaded)<br/>
+    <div id="debug" class="lazy" data-src="assets/img.jpg" style="display:none; height:50px; width:50px;"></div><br/><br/>
+
+    STYLE IS VISIBILITY:HIDDEN (result not loaded)<br/>
+    <div id="debug2" class="lazy" data-src="assets/img.jpg" style="visibility:hidden; height:50px; width:50px;"></div><br/><br/>
+
+    <hr>
+    <h1>Iframes</h1>
+
+    STANDARD LAZY LOAD - result is www.salesforce.com is loaded
+    <iframe class="lazy" data-src="http://www.salesforce.com"></iframe>
+
+  </body>
+</html>

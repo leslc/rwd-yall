@@ -1,0 +1,95 @@
+<html>
+  <head>
+    <title>Mocha</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="lib/browser/mocha.css" />
+    <script src="./lib/browser/jquery.js" type="text/javascript"></script>
+    <script src="./lib/mocha.js"></script>
+    <script src="./lib/chai.js" type="text/javascript"></script>
+    <script>mocha.setup('bdd')</script>
+    <script>
+      function assert(expr, msg) {
+        if (!expr) throw new Error(msg || 'failed');
+      }
+    </script>
+    <script src="../main.js"></script>
+    <script src="./spec.js"></script>
+    <script>
+      onload = function(){
+        var runner = mocha.run();
+        // runner.globals(['foo', 'bar', 'baz']);
+
+        // runner.on('test end', function(test){
+        //   console.log(test.fullTitle());
+        // });
+      };
+    </script>
+    <style type="text/css">
+      .topspacer {
+        width: 100%;
+        height: 1000px;
+      }
+
+      .far-right {
+        position: relative;
+        left: 2000px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="mocha"></div>
+
+    JUST YOUR REGULAR IMAGE (result: shouldn't be evaluated with unveil)<br/>
+    <img id="nolazy" src="../assets/spacer.png" ><br/><br/>
+    <div class='topspacer'>scrolldown to see images lazy load...</div>
+
+    STANDARD LAZY LOAD - no data-sizes (result: small waffles)<br/>
+    <img id="nosizes" class="lazy" src="../assets/spacer.png" data-src="../assets/img.jpg"><br/><br/>
+
+    LO (result: only small waffles on scr1/2)<br>
+    <img id="onlylo" class="lazy" src="../assets/spacer.png" data-src="../assets/img.jpg" data-sizes="lo"><br/><br/>
+
+    HI (result: only big waffles on scr3/4)<br/>
+    <img id="onlyhi" class="lazy" src="../assets/spacer.png" data-src="../assets/img.jpg" data-sizes="hi"><br/><br/>
+
+    LO,HI (result: small or big waffles, depending on res)<br/>
+    <img id="lohi" class="lazy" src="../assets/spacer.png" data-src="../assets/img.jpg" data-sizes="lo,hi"><br/><br/>
+
+    HI,LO (result: small or big waffles, depending on res)<br/>
+    <img id="hilo" class="lazy" src="../assets/spacer.png" data-src="../assets/img.jpg" data-sizes="hi,lo"><br/><br/>
+
+    RET-LO, RET-HI, HI, LO (result: small or big waffles, depending on res and retina)<br/>
+    <img class="lazy" src="../assets/spacer.png" data-src="../assets/img.jpg" data-sizes="ret-hi,ret-lo,hi,lo"><br/><br/>
+
+    HORIZONTAL - OUTSIDE RIGHT EDGE OF VIEWPORT
+    <img src="../assets/spacer.png" class="lazy far-right" data-src="../assets/img.jpg"><br/><br/>
+
+    EDGE CASES - data-src points to nonexistent image (result: warning inline message for missing image)<br>
+    <img class="lazy" src="../assets/spacer.png" data-src="../assets/not-there.jpg"><br/><br/>
+
+    EDGE CASES - data-src points to nonexistent image with data-sizes (result: warning inline message for missing image with suffix)<br>
+    <img class="lazy" src="../assets/spacer.png" data-src="../assets/not-there.jpg" data-sizes="lo,hi"><br/><br/>
+
+    EDGE CASES - data-sizes points to nonexistent image dimensions 'crazysize' (result: no change, shows spacer image)<br>
+    <img class="lazy" src="../assets/spacer.png" data-src="../assets/img.jpg" data-sizes="crazysize"><br/><br/>
+
+    EDGE CASES - spaces in data-sizes "&nbsp;&nbsp;hi&nbsp;&nbsp;,&nbsp;&nbsp;lo&nbsp;&nbsp;" (result: small or big waffles, depending on res)<br>
+    <img class="lazy" src="../assets/spacer.png" data-src="../assets/img.jpg" data-sizes="  hi  ,  lo  "><br/><br/>
+
+    EDGE CASES - empty data-sizes (result: small waffles)<br>
+    <img class="lazy" src="../assets/spacer.png" data-src="../assets/img.jpg" data-sizes=""><br/><br/>
+
+    EDGE CASES - missing handler (result inline message)
+    <img class="lazy" src="../assets/spacer.png"><br/><br/>
+
+    <hr>
+    <h1>Background Images</h1>
+
+    STANDARD LAZY LOAD - no data-sizes, no data-style, setting height/width elsewhere (result: small waffles)<br/>
+    <div class="lazy" src="../assets/spacer.png" data-src="../assets/img.jpg" style="height:50px; width:50px;"></div><br/><br/>
+
+    LO,HI - with dimensions (result: only small waffles on scr1/2)<br>
+    <div id="debug" class="lazy" src="../assets/spacer.png" data-src="../assets/img.jpg" data-sizes="lo,hi" data-style="lo=( height : 50px ; width : 50px ; background-position : top center ;),hi=( height : 150px ; width : 150px ; background-position : top center ;)"></div><br/><br/>
+
+  </body>
+</html>
